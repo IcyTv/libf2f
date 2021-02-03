@@ -1,4 +1,4 @@
-#include "libf2f/router.h"
+#include "../include/libf2f/router.h"
 #include "libf2f/connection.h"
 #include "libf2f/protocol.h"
 
@@ -10,9 +10,10 @@ namespace libf2f {
 
 using namespace std;
 
-Router::Router( boost::shared_ptr<boost::asio::ip::tcp::acceptor> accp,
+Router::Router( boost::shared_ptr<boost::asio::io_service> io_service, boost::shared_ptr<boost::asio::ip::tcp::acceptor> accp,
                 Protocol * p, boost::function<std::string()> uuidf )
-    :   m_acceptor( accp ),
+    :   m_io_service(io_service),
+        m_acceptor( accp ),
         m_protocol( p ),
         seen_connections(0),
         m_uuidgen( uuidf )
@@ -38,7 +39,7 @@ Router::Router( boost::shared_ptr<boost::asio::ip::tcp::acceptor> accp,
 connection_ptr
 Router::new_connection()
 {
-    return connection_ptr( new Connection( m_acceptor->io_service(), this ) );
+    return connection_ptr( new Connection( *m_io_service, this ) );
 }
                 
 std::string 

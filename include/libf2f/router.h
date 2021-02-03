@@ -30,10 +30,12 @@ public:
     /// acceptor(io_service, 
     ///          boost::asio::ip::tcp::endpoint(
     ///             boost::asio::ip::tcp::v4(), port) )
-    Router( boost::shared_ptr<boost::asio::ip::tcp::acceptor> accp, Protocol * p, boost::function<std::string()> uuidf );
+    Router(boost::shared_ptr<boost::asio::io_service> io_service, boost::shared_ptr<boost::asio::ip::tcp::acceptor> accp, Protocol * p, boost::function<std::string()> uuidf );
     
     /// how a new Connection is prepped:
     connection_ptr new_connection();
+
+    boost::asio::io_service io_service;
     
     /// lamest uuid generator ever, please supply your own.
     std::string lame_uuid_gen();
@@ -87,6 +89,8 @@ private:
     
     /// The acceptor object used to accept incoming socket connections.
     boost::shared_ptr<boost::asio::ip::tcp::acceptor> m_acceptor;
+
+    boost::shared_ptr<boost::asio::io_service> m_io_service;
     
     /// protocol implementation
     Protocol * m_protocol;

@@ -6,8 +6,8 @@
 #include <boost/thread/thread.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "libf2f/router.h"
-#include "libf2f/protocol.h"
+#include "../include/libf2f/router.h"
+#include "../include/libf2f/protocol.h"
 
 #include "demo_messages.h"
 #include "demo_protocol.h"
@@ -54,7 +54,10 @@ int main(int argc, char **argv)
                             port)
             ) 
     );
-    Router r(accp, &p, boost::bind(&lame_uuid_gen));
+
+    boost::shared_ptr<boost::asio::io_service> ios_ptr(&ios);
+
+    Router r(ios_ptr, accp, &p, boost::bind(&lame_uuid_gen));
     
     boost::thread t( boost::bind(&iorun, &ios) );
     
