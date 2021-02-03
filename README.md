@@ -27,3 +27,7 @@ make
 ##(Optional) This installs the library.
 sudo make install
 ```
+
+# Usage
+To use the library in your project add
+`-lf2f` to your compiler instructions after installing it
